@@ -1,0 +1,8 @@
+.{
+    .name = .paper_portal_sdk,
+    .version = "0.0.0",
+    .fingerprint = 0x101fbac3cfad224e,
+    .minimum_zig_version = "0.16.0-dev.0",
+    .dependencies = .{},
+    .paths = .{""},
+}
