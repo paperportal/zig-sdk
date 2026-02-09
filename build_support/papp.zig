@@ -70,7 +70,8 @@ pub const PortalPackage = struct {
 /// Adds a build step that generates a `.papp` package from a `.wasm` file.
 ///
 /// The package is installed to `zig-out/<name>-<version>.papp` by default.
-pub fn addPortalPackage(b: *std.Build, wasm_file: std.Build.LazyPath, opts: PappOptions) *PortalPackage {
+pub fn addPortalPackage(b: *std.Build, wasm_artifact: *std.Build.Step.Compile, opts: PappOptions) *PortalPackage {
+    const wasm_file = wasm_artifact.getEmittedBin();
     const pkg_step = PortalPackageStep.create(b, wasm_file, opts);
 
     const basename = deriveBasename(b, opts);
@@ -86,11 +87,6 @@ pub fn addPortalPackage(b: *std.Build, wasm_file: std.Build.LazyPath, opts: Papp
         .generated_papp = &pkg_step.generated_papp,
     };
     return pkg;
-}
-
-/// Adds a build step that generates a `.papp` package from a wasm artifact.
-pub fn addWasmPortalPackage(b: *std.Build, wasm_artifact: *std.Build.Step.Compile, opts: PappOptions) *PortalPackage {
-    return addPortalPackage(b, wasm_artifact.getEmittedBin(), opts);
 }
 
 const PortalPackageStep = struct {

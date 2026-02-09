@@ -67,7 +67,7 @@ pub const SigningOptions = papp.SigningOptions;
 ///
 /// ```zig
 /// const pp_sdk = @import("paper_portal_sdk");
-/// _ = pp_sdk.addWasmPortalPackage(b, exe, .{
+/// _ = pp_sdk.addPortalPackage(b, exe, .{
 ///     .manifest = .{
 ///         .id = "3fa85f64-5717-4562-b3fc-2c963f66afa6",
 ///         .name = "Notes",
@@ -194,21 +194,11 @@ pub fn addWasmUpload(b: *std.Build, wasm_artifact: *std.Build.Step.Compile, opts
     return addUploadStep(b, wasm_artifact.getEmittedBin(), opts);
 }
 
-/// Adds a packaging step that depends on the output of `wasm_artifact`.
-///
-/// This is a convenience wrapper around `addPortalPackage` that uses
-/// `wasm_artifact.getEmittedBin()` as the `app.wasm` payload.
-///
-/// The resulting `.papp` is installed to `zig-out/` under the install prefix.
-pub fn addWasmPortalPackage(b: *std.Build, wasm_artifact: *std.Build.Step.Compile, opts: PappOptions) *PortalPackage {
-    return papp.addWasmPortalPackage(b, wasm_artifact, opts);
-}
-
 /// Adds a packaging step that creates a Paper Portal `.papp` file.
 ///
 /// The resulting `.papp` is installed to `zig-out/` under the install prefix.
-pub fn addPortalPackage(b: *std.Build, wasm_file: std.Build.LazyPath, opts: PappOptions) *PortalPackage {
-    return papp.addPortalPackage(b, wasm_file, opts);
+pub fn addPortalPackage(b: *std.Build, wasm_artifact: *std.Build.Step.Compile, opts: PappOptions) *PortalPackage {
+    return papp.addPortalPackage(b, wasm_artifact, opts);
 }
 
 /// Adds an upload step that POSTs `wasm_file` to a Paper Portal device dev server.

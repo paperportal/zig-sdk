@@ -167,7 +167,7 @@ this app.
 
     const ppsdk = @import("paper_portal_sdk");
 
-    _ = ppsdk.addWasmPortalPackage(b, exe, .{
+    _ = ppsdk.addPortalPackage(b, exe, .{
         .manifest = .{
             .id = "00000000-0000-0000-0000-000000000000",
             .name = "Notes",
@@ -186,9 +186,7 @@ By default the output is installed to `zig-out/<name>-<version>.papp`.
 The packaging helper is configured via `ppsdk.PappOptions` and returns a
 `ppsdk.PortalPackage`.
 
-You can call:
-- `ppsdk.addWasmPortalPackage(b, wasm_artifact, opts)` (most common), or
-- `ppsdk.addPortalPackage(b, wasm_file_lazy_path, opts)` (if you already have a `.wasm` file path).
+You can call `ppsdk.addPortalPackage(b, wasm_artifact, opts)`.
 
 #### `PappOptions`
 
@@ -246,7 +244,7 @@ Seed selection precedence:
 
 #### `PortalPackage`
 
-Returned from `addWasmPortalPackage` / `addPortalPackage`:
+Returned from `addPortalPackage`:
 - `step: *std.Build.Step`: The top-level build step for packaging.
 - `getEmittedPapp() std.Build.LazyPath`: The generated `.papp` file (for wiring into other steps).
 
@@ -254,7 +252,7 @@ Returned from `addWasmPortalPackage` / `addPortalPackage`:
 
 Enable icon + assets:
 
-    _ = ppsdk.addWasmPortalPackage(b, exe, .{
+    _ = ppsdk.addPortalPackage(b, exe, .{
         .manifest = .{ .id = "...", .name = "MyApp", .version = "1.0.0" },
         .icon_png = b.path("icon.png"),
         .assets_dir = b.path("assets"),
@@ -262,7 +260,7 @@ Enable icon + assets:
 
 Enable signing:
 
-    _ = ppsdk.addWasmPortalPackage(b, exe, .{
+    _ = ppsdk.addPortalPackage(b, exe, .{
         .manifest = .{ .id = "...", .name = "MyApp", .version = "1.0.0" },
         .signing = .{},
     });
