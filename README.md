@@ -115,26 +115,23 @@ Example TCP listener:
 `zig-sdk` ships a small build helper that adds an `upload` step which POSTs your
 generated `.wasm` to the Paper Portal device dev server:
 
-    const ppsdk = @import("paper_portal_sdk");
+    const sdk = @import("paper_portal_sdk");
 
-    _ = ppsdk.addWasmUpload(b, exe, .{});
+    _ = sdk.addWasmUpload(b, exe, .{});
 
-## Build helper: `ppsdk.addPortalApp` (one-call app setup)
+## Build helper: `sdk.addPortalApp` (one-call app setup)
 
 If your project follows the standard Paper Portal WASM layout, you can use
-`ppsdk.addPortalApp()` to set up the target, root module, exports, SDK import,
+`sdk.addPortalApp()` to set up the target, root module, exports, SDK import,
 `upload` step, memory settings, and install steps in one call:
 
-    const ppsdk = @import("paper_portal_sdk");
+    const sdk = @import("paper_portal_sdk");
 
-    const app = ppsdk.addPortalApp(b, .{
+    const app = sdk.addPortalApp(b, .{
         .os_tag = .freestanding,
         .export_symbol_names = &.{
-            "pp_contract_version",
             "pp_init",
             "pp_shutdown",
-            "pp_alloc",
-            "pp_free",
             "pp_on_gesture",
         },
     });
@@ -165,9 +162,9 @@ This is the simplest addition to `build.zig` for building Paper Portal app
 package. Replace the id with an unique generated UUID that is used only for
 this app.
 
-    const ppsdk = @import("paper_portal_sdk");
+    const sdk = @import("paper_portal_sdk");
 
-    _ = ppsdk.addPortalPackage(b, exe, .{
+    _ = sdk.addPortalPackage(b, exe, .{
         .manifest = .{
             .id = "00000000-0000-0000-0000-000000000000",
             .name = "Notes",
@@ -183,10 +180,10 @@ By default the output is installed to `zig-out/<name>-<version>.papp`.
 
 ### API (everything you can configure)
 
-The packaging helper is configured via `ppsdk.PappOptions` and returns a
-`ppsdk.PortalPackage`.
+The packaging helper is configured via `sdk.PappOptions` and returns a
+`sdk.PortalPackage`.
 
-You can call `ppsdk.addPortalPackage(b, wasm_artifact, opts)`.
+You can call `sdk.addPortalPackage(b, wasm_artifact, opts)`.
 
 #### `PappOptions`
 
@@ -215,7 +212,7 @@ Notes:
 
 #### `CompressionOptions`
 
-Values are `ppsdk.ZipCompression` (`.store` or `.deflate`).
+Values are `sdk.ZipCompression` (`.store` or `.deflate`).
 
 - `wasm: .deflate` (default): Compress `app.wasm` with deflate (raw DEFLATE stream).
 - `manifest: .store` (default): Store `manifest.json` uncompressed.
@@ -252,7 +249,7 @@ Returned from `addPortalPackage`:
 
 Enable icon + assets:
 
-    _ = ppsdk.addPortalPackage(b, exe, .{
+    _ = sdk.addPortalPackage(b, exe, .{
         .manifest = .{ .id = "...", .name = "MyApp", .version = "1.0.0" },
         .icon_png = b.path("icon.png"),
         .assets_dir = b.path("assets"),
@@ -260,7 +257,7 @@ Enable icon + assets:
 
 Enable signing:
 
-    _ = ppsdk.addPortalPackage(b, exe, .{
+    _ = sdk.addPortalPackage(b, exe, .{
         .manifest = .{ .id = "...", .name = "MyApp", .version = "1.0.0" },
         .signing = .{},
     });

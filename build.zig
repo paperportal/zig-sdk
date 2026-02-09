@@ -86,7 +86,7 @@ pub const PortalAppOptions = struct {
     /// Exports to include in the final `.wasm`.
     ///
     /// Example:
-    /// `&.{ "pp_contract_version", "pp_init", "pp_shutdown", "pp_alloc", "pp_free", "pp_on_gesture" }`
+    /// `&.{ "pp_init", "pp_shutdown", "pp_on_gesture" }`
     export_symbol_names: []const []const u8,
 
     /// Default target for Paper Portal apps. Users may override via CLI target options.
@@ -121,6 +121,7 @@ pub const PortalApp = struct {
     target: std.Build.ResolvedTarget,
     optimize: std.builtin.OptimizeMode,
     root_mod: *std.Build.Module,
+    sdk_mod: *std.Build.Module,
     exe: *std.Build.Step.Compile,
     upload_step: ?*std.Build.Step,
 };
@@ -138,7 +139,16 @@ pub fn addPortalApp(b: *std.Build, opts: PortalAppOptions) PortalApp {
         .optimize = opts.optimize,
         .strip = true,
     });
-    root_mod.export_symbol_names = opts.export_symbol_names;
+    const required_exports = [_][]const u8{
+        "portal_contract_version",
+        "portal_alloc",
+        "portal_free",
+    };
+    var list: std.ArrayList([]const u8) = .empty;
+    defer list.deinit(b.allocator);
+    list.appendSlice(b.allocator, required_exports[0..]) catch @panic("OOM");
+    list.appendSlice(b.allocator, opts.export_symbol_names) catch @panic("OOM");
+    root_mod.export_symbol_names = list.toOwnedSlice(b.allocator) catch @panic("OOM");
 
     const exe = b.addExecutable(.{
         .name = opts.exe_name,
@@ -181,6 +191,7 @@ pub fn addPortalApp(b: *std.Build, opts: PortalAppOptions) PortalApp {
         .target = target,
         .optimize = opts.optimize,
         .root_mod = root_mod,
+        .sdk_mod = sdk,
         .exe = exe,
         .upload_step = upload_step,
     };
