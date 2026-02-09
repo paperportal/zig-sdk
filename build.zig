@@ -81,6 +81,8 @@ pub const PappOptions = papp.PappOptions;
 pub const PortalPackage = papp.PortalPackage;
 
 pub const PortalAppOptions = struct {
+    local_sdk_path: ?[]const u8 = null,
+
     /// Exports to include in the final `.wasm`.
     ///
     /// Example:
@@ -113,9 +115,6 @@ pub const PortalAppOptions = struct {
 
     /// Zig dependency name used to locate the SDK `sdk.zig` module.
     sdk_dependency_name: []const u8 = "paper_portal_sdk",
-
-    /// Import name to use within the app (code uses `@import("paper_portal_sdk")`).
-    sdk_import_name: []const u8 = "paper_portal_sdk",
 };
 
 pub const PortalApp = struct {
@@ -155,13 +154,20 @@ pub fn addPortalApp(b: *std.Build, opts: PortalAppOptions) PortalApp {
     else
         null;
 
-    const sdk_dep = b.dependency(opts.sdk_dependency_name, .{});
+    var sdk_dep = b.dependency("paper_portal_sdk", .{});
+    if (opts.local_sdk_path) |path| {
+        if (dirExists(b, path)) {
+            const local_name = b.fmt("{s}_local", .{opts.sdk_dependency_name});
+            sdk_dep = (b.lazyDependency(local_name, .{}) orelse @panic("local sdk dependency missing"));
+        }
+    }
+
     const sdk = b.createModule(.{
         .root_source_file = sdk_dep.path("sdk.zig"),
         .target = target,
         .optimize = opts.optimize,
     });
-    exe.root_module.addImport(opts.sdk_import_name, sdk);
+    exe.root_module.addImport("paper_portal_sdk", sdk);
 
     exe.stack_size = opts.stack_size;
     exe.initial_memory = opts.initial_memory;
@@ -424,4 +430,9 @@ fn hostForUrl(b: *std.Build, host: []const u8) []const u8 {
         return b.fmt("[{s}]", .{host});
     }
     return host;
+}
+
+fn dirExists(b: *std.Build, rel: []const u8) bool {
+    std.Io.Dir.cwd().access(b.graph.io, rel, .{}) catch return false;
+    return true;
 }
