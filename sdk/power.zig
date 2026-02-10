@@ -43,6 +43,10 @@ pub fn deepSleepUs(us: i64) Error!void {
     try errors.check(ffi.powerDeepSleepUs(us));
 }
 
-pub fn off() Error!void {
-    try errors.check(ffi.powerOff());
+pub fn off(showSleepImage: bool) Error!void {
+    if (showSleepImage) {
+        try errors.check(ffi.powerOffWithSleepImage(1));
+    } else {
+        try errors.check(ffi.powerOff());
+    }
 }

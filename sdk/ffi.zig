@@ -172,6 +172,7 @@ pub extern "m5_power" fn powerRestart() i32;
 pub extern "m5_power" fn powerLightSleepUs(us: i64) i32;
 pub extern "m5_power" fn powerDeepSleepUs(us: i64) i32;
 pub extern "m5_power" fn powerOff() i32;
+pub extern "m5_power" fn powerOffWithSleepImage(show_sleep_image: i32) i32;
 
 // IMU functions
 

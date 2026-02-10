@@ -32,6 +32,16 @@ Exit current app and return to launcher:
 
     try sdk.core.exitApp();
 
+## Power management
+
+Power off the device:
+
+    try sdk.power.off(false);
+
+Power off and show the firmware-provided sleep image first:
+
+    try sdk.power.off(true);
+
 ## UI scenes
 
 The SDK provides a small scene stack to help structure UI apps around the host's
