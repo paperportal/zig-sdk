@@ -20,6 +20,7 @@ pub const GestureKind = enum(i32) {
     drag_start = 4,
     drag_move = 5,
     drag_end = 6,
+    custom_polyline = 100,
 };
 
 pub const GestureEvent = struct {
@@ -54,6 +55,7 @@ fn kindFromI32(v: i32) GestureKind {
         4 => .drag_start,
         5 => .drag_move,
         6 => .drag_end,
+        100 => .custom_polyline,
         else => .unknown,
     };
 }

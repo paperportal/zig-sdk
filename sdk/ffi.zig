@@ -84,6 +84,22 @@ pub extern "m5_touch" fn touchGetRaw(index: i32, out: [*]u8, out_len: i32) i32;
 pub extern "m5_touch" fn touchGetDetail(index: i32, out: [*]u8, out_len: i32) i32;
 pub extern "m5_touch" fn touchSetHoldThresh(ms: i32) i32;
 pub extern "m5_touch" fn touchSetFlickThresh(distance: i32) i32;
+
+// Custom gesture recognition
+
+pub extern "m5_gesture" fn gestureClearAll() i32;
+pub extern "m5_gesture" fn gestureRegisterPolyline(
+    id: [*:0]const u8,
+    points_ptr: [*]const u8,
+    points_len: i32,
+    fixed: i32,
+    tolerance_px: f32,
+    priority: i32,
+    max_duration_ms: i32,
+    options: i32,
+) i32;
+pub extern "m5_gesture" fn gestureRemove(handle: i32) i32;
+
 pub extern "m5_fs" fn fsIsMounted() i32;
 pub extern "m5_fs" fn fsMount() i32;
 pub extern "m5_fs" fn fsUnmount() i32;

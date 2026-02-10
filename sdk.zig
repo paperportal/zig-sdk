@@ -4,6 +4,7 @@ pub const display = @import("sdk/display.zig");
 pub const errors = @import("sdk/error.zig");
 pub const fastepd = @import("sdk/fastepd.zig");
 pub const fs = @import("sdk/fs.zig");
+pub const gesture = @import("sdk/gesture.zig");
 pub const hal = @import("sdk/hal.zig");
 pub const imu = @import("sdk/imu.zig");
 pub const misc = @import("sdk/misc.zig");
