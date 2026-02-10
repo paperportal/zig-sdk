@@ -14,6 +14,7 @@ pub const rtc = @import("sdk/rtc.zig");
 pub const socket = @import("sdk/socket.zig");
 pub const speaker = @import("sdk/speaker.zig");
 pub const touch = @import("sdk/touch.zig");
+pub const ui = @import("sdk/ui.zig");
 
 pub const Error = errors.Error;
 
