@@ -39,21 +39,21 @@ pub const Metadata = struct {
 
 const STAT_SIZE: usize = 24;
 
-pub fn is_mounted() bool {
-    return ffi.fs_is_mounted() != 0;
+pub fn isMounted() bool {
+    return ffi.fsIsMounted() != 0;
 }
 
 pub fn mount() Error!void {
-    try errors.check(ffi.fs_mount());
+    try errors.check(ffi.fsMount());
 }
 
 pub fn unmount() Error!void {
-    try errors.check(ffi.fs_unmount());
+    try errors.check(ffi.fsUnmount());
 }
 
-pub fn card_info() Error!SdInfo {
+pub fn cardInfo() Error!SdInfo {
     var buf: [SD_INFO_SIZE]u8 = undefined;
-    try errors.check(ffi.fs_card_info(&buf, buf.len));
+    try errors.check(ffi.fsCardInfo(&buf, buf.len));
 
     const mounted = buf[0] != 0;
     const card_type = @as(SdCardType, @enumFromInt(buf[1]));
@@ -71,7 +71,7 @@ pub fn card_info() Error!SdInfo {
 
 pub fn metadata(path: [:0]const u8) Error!Metadata {
     var buf: [STAT_SIZE]u8 = undefined;
-    const rc = ffi.fs_stat(path, &buf, buf.len);
+    const rc = ffi.fsStat(path, &buf, buf.len);
     if (rc < 0) return errors.fromCode(rc);
 
     const size = std.mem.readInt(u64, buf[0..8], .little);
@@ -81,17 +81,17 @@ pub fn metadata(path: [:0]const u8) Error!Metadata {
 
 pub fn mtime(path: [:0]const u8) Error!i64 {
     var buf: [STAT_SIZE]u8 = undefined;
-    const rc = ffi.fs_stat(path, &buf, buf.len);
+    const rc = ffi.fsStat(path, &buf, buf.len);
     if (rc < 0) return errors.fromCode(rc);
     return std.mem.readInt(i64, buf[16..24], .little);
 }
 
 pub fn remove(path: [:0]const u8) Error!void {
-    try errors.check(ffi.fs_remove(path));
+    try errors.check(ffi.fsRemove(path));
 }
 
 pub fn rename(from: [:0]const u8, to: [:0]const u8) Error!void {
-    try errors.check(ffi.fs_rename(from, to));
+    try errors.check(ffi.fsRename(from, to));
 }
 
 pub const SeekFrom = union(enum) {
@@ -112,26 +112,26 @@ pub const File = struct {
     handle: i32,
 
     pub fn open(path: [:0]const u8, flags: i32) Error!File {
-        const handle = ffi.fs_open(path, flags);
+        const handle = ffi.fsOpen(path, flags);
         if (handle < 0) return errors.fromCode(handle);
         return File{ .handle = handle };
     }
 
     pub fn read(self: *File, out: []u8) Error!usize {
-        const rc = ffi.fs_read(self.handle, out.ptr, @intCast(out.len));
+        const rc = ffi.fsRead(self.handle, out.ptr, @intCast(out.len));
         if (rc < 0) return errors.fromCode(rc);
         return @intCast(rc);
     }
 
     pub fn write(self: *File, data: []const u8) Error!usize {
-        const rc = ffi.fs_write(self.handle, data.ptr, @intCast(data.len));
+        const rc = ffi.fsWrite(self.handle, data.ptr, @intCast(data.len));
         if (rc < 0) return errors.fromCode(rc);
         return @intCast(rc);
     }
 
     pub fn seek(self: *File, pos: SeekFrom) Error!i32 {
         const args = pos.toArgs();
-        const rc = ffi.fs_seek(self.handle, args.offset, args.whence);
+        const rc = ffi.fsSeek(self.handle, args.offset, args.whence);
         if (rc < 0) return errors.fromCode(rc);
         return rc;
     }
@@ -140,7 +140,7 @@ pub const File = struct {
         if (self.handle < 0) return;
         const handle = self.handle;
         self.handle = -1;
-        try errors.check(ffi.fs_close(handle));
+        try errors.check(ffi.fsClose(handle));
     }
 };
 
@@ -148,22 +148,22 @@ pub const Dir = struct {
     handle: i32,
 
     pub fn mkdir(path: [:0]const u8) Error!void {
-        try errors.check(ffi.fs_mkdir(path));
+        try errors.check(ffi.fsMkdir(path));
     }
 
     pub fn rmdir(path: [:0]const u8) Error!void {
-        try errors.check(ffi.fs_rmdir(path));
+        try errors.check(ffi.fsRmdir(path));
     }
 
     pub fn open(path: [:0]const u8) Error!Dir {
-        const handle = ffi.fs_opendir(path);
+        const handle = ffi.fsOpendir(path);
         if (handle < 0) return errors.fromCode(handle);
         return Dir{ .handle = handle };
     }
 
-    pub fn read_name(self: *Dir, out: []u8) Error!?usize {
+    pub fn readName(self: *Dir, out: []u8) Error!?usize {
         if (out.len == 0) return Error.InvalidArgument;
-        const rc = ffi.fs_readdir(self.handle, out.ptr, @intCast(out.len));
+        const rc = ffi.fsReaddir(self.handle, out.ptr, @intCast(out.len));
         if (rc < 0) return errors.fromCode(rc);
         if (rc == 0) return null;
         return @intCast(rc);
@@ -173,6 +173,6 @@ pub const Dir = struct {
         if (self.handle < 0) return;
         const handle = self.handle;
         self.handle = -1;
-        try errors.check(ffi.fs_closedir(handle));
+        try errors.check(ffi.fsClosedir(handle));
     }
 };

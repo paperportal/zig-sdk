@@ -86,7 +86,7 @@ pub const PortalAppOptions = struct {
     /// Exports to include in the final `.wasm`.
     ///
     /// Example:
-    /// `&.{ "pp_init", "pp_shutdown", "pp_on_gesture" }`
+    /// `&.{ "ppInit", "ppShutdown", "ppOnGesture" }`
     export_symbol_names: []const []const u8,
 
     /// Default target for Paper Portal apps. Users may override via CLI target options.
@@ -140,9 +140,9 @@ pub fn addPortalApp(b: *std.Build, opts: PortalAppOptions) PortalApp {
         .strip = true,
     });
     const required_exports = [_][]const u8{
-        "portal_contract_version",
-        "portal_alloc",
-        "portal_free",
+        "portalContractVersion",
+        "portalAlloc",
+        "portalFree",
     };
     var list: std.ArrayList([]const u8) = .empty;
     defer list.deinit(b.allocator);

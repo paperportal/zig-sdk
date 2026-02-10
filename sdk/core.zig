@@ -5,7 +5,7 @@ const errors = @import("error.zig");
 /// Core SDK error set.
 pub const Error = errors.Error;
 
-/// Feature flags returned by `api_features()`.
+/// Feature flags returned by `apiFeatures()`.
 pub const Feature = struct {
     /// Core API functions are available.
     pub const core: u64 = 1 << 0;
@@ -51,26 +51,26 @@ pub fn begin() Error!void {
 }
 
 /// Returns the current host API version number.
-pub fn api_version() i32 {
-    return ffi.api_version();
+pub fn apiVersion() i32 {
+    return ffi.apiVersion();
 }
 
 /// Returns a bitset of supported API features.
-pub fn api_features() i64 {
-    return ffi.api_features();
+pub fn apiFeatures() i64 {
+    return ffi.apiFeatures();
 }
 
 /// Returns the last error code reported by the host.
-pub fn last_error_code() i32 {
-    return ffi.last_error_code();
+pub fn lastErrorCode() i32 {
+    return ffi.lastErrorCode();
 }
 
 /// Writes the last error message into `buf` and returns it as a slice (without the trailing NUL).
 ///
 /// `buf` must be non-empty.
-pub fn last_error_message(buf: []u8) Error![]const u8 {
+pub fn lastErrorMessage(buf: []u8) Error![]const u8 {
     if (buf.len == 0) return Error.InvalidArgument;
-    try errors.check(ffi.last_error_message(buf.ptr, buf.len));
+    try errors.check(ffi.lastErrorMessage(buf.ptr, buf.len));
     const nul_index = std.mem.indexOfScalar(u8, buf, 0) orelse buf.len;
     return buf[0..nul_index];
 }
@@ -78,28 +78,28 @@ pub fn last_error_message(buf: []u8) Error![]const u8 {
 /// Runs a heap integrity check.
 ///
 /// When `print_errors` is true, the host may emit details to the log.
-pub fn heap_check(label: [:0]const u8, print_errors: bool) bool {
-    return ffi.heap_check(label, if (print_errors) 1 else 0) != 0;
+pub fn heapCheck(label: [:0]const u8, print_errors: bool) bool {
+    return ffi.heapCheck(label, if (print_errors) 1 else 0) != 0;
 }
 
 /// Logs current heap stats to the host log.
 ///
 /// If `label` is null, uses `"wasm"`.
-pub fn heap_log(label: ?[:0]const u8) void {
-    ffi.heap_log(label orelse "wasm");
+pub fn heapLog(label: ?[:0]const u8) void {
+    ffi.heapLog(label orelse "wasm");
 }
 
 /// Launch another wasm app. Supported app_ids: "launcher", "settings".
 /// arguments is optional JSON data (null or "" for no arguments).
 /// Returns Error or void on success.
-pub fn open_app(app_id: [:0]const u8, arguments: ?[:0]const u8) Error!void {
+pub fn openApp(app_id: [:0]const u8, arguments: ?[:0]const u8) Error!void {
     const args = arguments orelse "";
-    try errors.check(ffi.open_app(app_id, args));
+    try errors.check(ffi.openApp(app_id, args));
 }
 
 /// Request exit of the current app. The host relaunches launcher automatically.
-pub fn exit_app() Error!void {
-    try errors.check(ffi.exit_app());
+pub fn exitApp() Error!void {
+    try errors.check(ffi.exitApp());
 }
 
 /// Host logging utilities.
@@ -109,7 +109,7 @@ pub const log = struct {
 
     /// Logs an informational message.
     pub fn info(msg: [:0]const u8) void {
-        ffi.log_info(msg);
+        ffi.logInfo(msg);
     }
 
     /// Logs an informational message using a format string and arguments.
@@ -123,7 +123,7 @@ pub const log = struct {
 
     /// Logs a warning message.
     pub fn warn(msg: [:0]const u8) void {
-        ffi.log_warn(msg);
+        ffi.logWarn(msg);
     }
 
     /// Logs a warning message using a format string and arguments.
@@ -137,7 +137,7 @@ pub const log = struct {
 
     /// Logs an error message.
     pub fn err(msg: [:0]const u8) void {
-        ffi.log_error(msg);
+        ffi.logError(msg);
     }
 
     /// Logs an error message using a format string and arguments.
@@ -153,8 +153,8 @@ pub const log = struct {
 /// Time utilities.
 pub const time = struct {
     /// Blocks for at least `ms` milliseconds.
-    pub fn delay_ms(ms: i32) void {
-        _ = ffi.delay_ms(ms);
+    pub fn delayMs(ms: i32) void {
+        _ = ffi.delayMs(ms);
     }
 
     /// Returns milliseconds since boot.

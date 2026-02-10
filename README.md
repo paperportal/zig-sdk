@@ -13,6 +13,10 @@ for WASM applications.
 - Add to zig project with: `zig fetch --save git+https://github.com/paperportal/zig-sdk`
 - Then to wasm with: `zig build -Dtarget=wasm32-wasi -Doptimize=ReleaseSmall`
 
+## Naming conventions (Zig)
+
+Use `lowerCamelCase` for all functions, except functions that return a type (Zig), which use `PascalCase`.
+
 In a Zig WASM module, add the SDK as a module search path and import it:
 
     const sdk = @import("paper_portal_sdk");
@@ -22,16 +26,16 @@ In a Zig WASM module, add the SDK as a module search path and import it:
 
 Switch to another app:
 
-    try sdk.core.open_app("settings", null);
+    try sdk.core.openApp("settings", null);
 
 Exit current app and return to launcher:
 
-    try sdk.core.exit_app();
+    try sdk.core.exitApp();
 
 ## UI scenes
 
 The SDK provides a small scene stack to help structure UI apps around the host's
-`pp_on_gesture` callback.
+`ppOnGesture` callback.
 
 Minimal usage:
 
@@ -60,7 +64,7 @@ Minimal usage:
     var g_stack: ui.SceneStack = undefined;
     var g_main: MainScene = .{};
 
-    pub export fn pp_init(api_version: i32, screen_w: i32, screen_h: i32, args_ptr: i32, args_len: i32) i32 {
+    pub export fn ppInit(api_version: i32, screen_w: i32, screen_h: i32, args_ptr: i32, args_len: i32) i32 {
         _ = api_version;
         _ = args_ptr;
         _ = args_len;
@@ -71,12 +75,12 @@ Minimal usage:
         return 0;
     }
 
-    pub export fn pp_on_gesture(kind: i32, x: i32, y: i32, dx: i32, dy: i32, duration_ms: i32, now_ms: i32, flags: i32) i32 {
+    pub export fn ppOnGesture(kind: i32, x: i32, y: i32, dx: i32, dy: i32, duration_ms: i32, now_ms: i32, flags: i32) i32 {
         g_stack.handleGestureFromArgs(kind, x, y, dx, dy, duration_ms, now_ms, flags) catch {};
         return 0;
     }
 
-    pub export fn pp_tick(now_ms: i32) i32 {
+    pub export fn ppTick(now_ms: i32) i32 {
         g_stack.tick(now_ms) catch {};
         return 0;
     }
@@ -130,9 +134,9 @@ If your project follows the standard Paper Portal WASM layout, you can use
     const app = sdk.addPortalApp(b, .{
         .os_tag = .freestanding,
         .export_symbol_names = &.{
-            "pp_init",
-            "pp_shutdown",
-            "pp_on_gesture",
+            "ppInit",
+            "ppShutdown",
+            "ppOnGesture",
         },
     });
 

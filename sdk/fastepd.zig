@@ -53,120 +53,120 @@ fn checkEpdRc(rc: i32) Error!void {
 }
 
 pub fn init(panel_type: i32, speed_hz: i32) Error!void {
-    try checkEpdRc(ffi.epd_init_panel(panel_type, speed_hz));
+    try checkEpdRc(ffi.epdInitPanel(panel_type, speed_hz));
 }
 
-pub fn init_lights(led1: i32, led2: i32) Error!void {
-    try errors.check(ffi.epd_init_lights(led1, led2));
+pub fn initLights(led1: i32, led2: i32) Error!void {
+    try errors.check(ffi.epdInitLights(led1, led2));
 }
 
-pub fn set_brightness(led1: i32, led2: i32) Error!void {
-    try errors.check(ffi.epd_set_brightness(led1, led2));
+pub fn setBrightness(led1: i32, led2: i32) Error!void {
+    try errors.check(ffi.epdSetBrightness(led1, led2));
 }
 
-pub fn set_mode(new_mode: i32) Error!void {
-    try checkEpdRc(ffi.epd_set_mode(new_mode));
+pub fn setMode(new_mode: i32) Error!void {
+    try checkEpdRc(ffi.epdSetMode(new_mode));
 }
 
-pub fn get_mode() i32 {
-    return ffi.epd_get_mode();
+pub fn getMode() i32 {
+    return ffi.epdGetMode();
 }
 
-pub fn set_panel_size_preset(panel_id: i32) Error!void {
-    try checkEpdRc(ffi.epd_set_panel_size_preset(panel_id));
+pub fn setPanelSizePreset(panel_id: i32) Error!void {
+    try checkEpdRc(ffi.epdSetPanelSizePreset(panel_id));
 }
 
-pub fn set_panel_size(panel_width: i32, panel_height: i32, flags: i32, vcom_mv: i32) Error!void {
-    try checkEpdRc(ffi.epd_set_panel_size(panel_width, panel_height, flags, vcom_mv));
+pub fn setPanelSize(panel_width: i32, panel_height: i32, flags: i32, vcom_mv: i32) Error!void {
+    try checkEpdRc(ffi.epdSetPanelSize(panel_width, panel_height, flags, vcom_mv));
 }
 
-pub fn set_custom_matrix(matrix: []const u8) Error!void {
-    try checkEpdRc(ffi.epd_set_custom_matrix(matrix.ptr, matrix.len));
+pub fn setCustomMatrix(matrix: []const u8) Error!void {
+    try checkEpdRc(ffi.epdSetCustomMatrix(matrix.ptr, matrix.len));
 }
 
 pub fn width() i32 {
-    return ffi.epd_width();
+    return ffi.epdWidth();
 }
 
 pub fn height() i32 {
-    return ffi.epd_height();
+    return ffi.epdHeight();
 }
 
-pub fn get_rotation() i32 {
-    return ffi.epd_get_rotation();
+pub fn getRotation() i32 {
+    return ffi.epdGetRotation();
 }
 
-pub fn set_rotation(rotation: i32) Error!void {
-    try checkEpdRc(ffi.epd_set_rotation(rotation));
+pub fn setRotation(rotation: i32) Error!void {
+    try checkEpdRc(ffi.epdSetRotation(rotation));
 }
 
-pub fn fill_screen(color: i32) Error!void {
-    try errors.check(ffi.epd_fill_screen(color));
+pub fn fillScreen(color: i32) Error!void {
+    try errors.check(ffi.epdFillScreen(color));
 }
 
-pub fn draw_pixel(x: i32, y: i32, color: i32) Error!void {
-    try errors.check(ffi.epd_draw_pixel(x, y, color));
+pub fn drawPixel(x: i32, y: i32, color: i32) Error!void {
+    try errors.check(ffi.epdDrawPixel(x, y, color));
 }
 
-pub fn draw_pixel_fast(x: i32, y: i32, color: i32) Error!void {
-    try errors.check(ffi.epd_draw_pixel_fast(x, y, color));
+pub fn drawPixelFast(x: i32, y: i32, color: i32) Error!void {
+    try errors.check(ffi.epdDrawPixelFast(x, y, color));
 }
 
-pub fn draw_line(x1: i32, y1: i32, x2: i32, y2: i32, color: i32) Error!void {
-    try errors.check(ffi.epd_draw_line(x1, y1, x2, y2, color));
+pub fn drawLine(x1: i32, y1: i32, x2: i32, y2: i32, color: i32) Error!void {
+    try errors.check(ffi.epdDrawLine(x1, y1, x2, y2, color));
 }
 
-pub fn draw_rect(x: i32, y: i32, w: i32, h: i32, color: i32) Error!void {
-    try errors.check(ffi.epd_draw_rect(x, y, w, h, color));
+pub fn drawRect(x: i32, y: i32, w: i32, h: i32, color: i32) Error!void {
+    try errors.check(ffi.epdDrawRect(x, y, w, h, color));
 }
 
-pub fn fill_rect(x: i32, y: i32, w: i32, h: i32, color: i32) Error!void {
-    try errors.check(ffi.epd_fill_rect(x, y, w, h, color));
+pub fn fillRect(x: i32, y: i32, w: i32, h: i32, color: i32) Error!void {
+    try errors.check(ffi.epdFillRect(x, y, w, h, color));
 }
 
-pub fn draw_circle(x: i32, y: i32, r: i32, color: i32) Error!void {
-    try errors.check(ffi.epd_draw_circle(x, y, r, color));
+pub fn drawCircle(x: i32, y: i32, r: i32, color: i32) Error!void {
+    try errors.check(ffi.epdDrawCircle(x, y, r, color));
 }
 
-pub fn fill_circle(x: i32, y: i32, r: i32, color: i32) Error!void {
-    try errors.check(ffi.epd_fill_circle(x, y, r, color));
+pub fn fillCircle(x: i32, y: i32, r: i32, color: i32) Error!void {
+    try errors.check(ffi.epdFillCircle(x, y, r, color));
 }
 
-pub fn draw_round_rect(x: i32, y: i32, w: i32, h: i32, r: i32, color: i32) Error!void {
-    try errors.check(ffi.epd_draw_round_rect(x, y, w, h, r, color));
+pub fn drawRoundRect(x: i32, y: i32, w: i32, h: i32, r: i32, color: i32) Error!void {
+    try errors.check(ffi.epdDrawRoundRect(x, y, w, h, r, color));
 }
 
-pub fn fill_round_rect(x: i32, y: i32, w: i32, h: i32, r: i32, color: i32) Error!void {
-    try errors.check(ffi.epd_fill_round_rect(x, y, w, h, r, color));
+pub fn fillRoundRect(x: i32, y: i32, w: i32, h: i32, r: i32, color: i32) Error!void {
+    try errors.check(ffi.epdFillRoundRect(x, y, w, h, r, color));
 }
 
-pub fn draw_triangle(x0: i32, y0: i32, x1: i32, y1: i32, x2: i32, y2: i32, color: i32) Error!void {
-    try errors.check(ffi.epd_draw_triangle(x0, y0, x1, y1, x2, y2, color));
+pub fn drawTriangle(x0: i32, y0: i32, x1: i32, y1: i32, x2: i32, y2: i32, color: i32) Error!void {
+    try errors.check(ffi.epdDrawTriangle(x0, y0, x1, y1, x2, y2, color));
 }
 
-pub fn fill_triangle(x0: i32, y0: i32, x1: i32, y1: i32, x2: i32, y2: i32, color: i32) Error!void {
-    try errors.check(ffi.epd_fill_triangle(x0, y0, x1, y1, x2, y2, color));
+pub fn fillTriangle(x0: i32, y0: i32, x1: i32, y1: i32, x2: i32, y2: i32, color: i32) Error!void {
+    try errors.check(ffi.epdFillTriangle(x0, y0, x1, y1, x2, y2, color));
 }
 
 pub const text = struct {
-    pub fn set_color(fg: i32, bg: i32) Error!void {
-        try errors.check(ffi.epd_set_text_color(fg, bg));
+    pub fn setColor(fg: i32, bg: i32) Error!void {
+        try errors.check(ffi.epdSetTextColor(fg, bg));
     }
 
-    pub fn set_cursor(x: i32, y: i32) Error!void {
-        try errors.check(ffi.epd_set_cursor(x, y));
+    pub fn setCursor(x: i32, y: i32) Error!void {
+        try errors.check(ffi.epdSetCursor(x, y));
     }
 
-    pub fn set_font(font: i32) Error!void {
-        try errors.check(ffi.epd_set_font(font));
+    pub fn setFont(font: i32) Error!void {
+        try errors.check(ffi.epdSetFont(font));
     }
 
-    pub fn set_wrap(wrap: bool) Error!void {
-        try errors.check(ffi.epd_set_text_wrap(@intFromBool(wrap)));
+    pub fn setWrap(wrap: bool) Error!void {
+        try errors.check(ffi.epdSetTextWrap(@intFromBool(wrap)));
     }
 
-    pub fn draw_cstr(text_cstr: [:0]const u8, x: i32, y: i32) Error!void {
-        _ = try errors.checkI32(ffi.epd_draw_string(text_cstr, x, y));
+    pub fn drawCstr(text_cstr: [:0]const u8, x: i32, y: i32) Error!void {
+        _ = try errors.checkI32(ffi.epdDrawString(text_cstr, x, y));
     }
 
     pub fn draw(text_bytes: []const u8, x: i32, y: i32) Error!void {
@@ -175,81 +175,81 @@ pub const text = struct {
         const max_copy = @min(text_bytes.len, buf.len - 1);
         std.mem.copyForwards(u8, buf[0..max_copy], text_bytes[0..max_copy]);
         buf[max_copy] = 0;
-        try draw_cstr(buf[0..max_copy :0], x, y);
+        try drawCstr(buf[0..max_copy :0], x, y);
     }
 
-    pub fn get_box(text_cstr: [:0]const u8) Error!Rect {
+    pub fn getBox(text_cstr: [:0]const u8) Error!Rect {
         var rect: Rect = .{ .x = 0, .y = 0, .w = 0, .h = 0 };
-        const rc = ffi.epd_get_string_box(text_cstr, @as([*]u8, @ptrCast(&rect)), @intCast(@sizeOf(Rect)));
+        const rc = ffi.epdGetStringBox(text_cstr, @as([*]u8, @ptrCast(&rect)), @intCast(@sizeOf(Rect)));
         if (rc < 0) return errors.fromCode(rc);
         if (rc != @sizeOf(Rect)) return Error.Internal;
         return rect;
     }
 };
 
-pub fn full_update(clear_mode: i32, keep_on: i32) Error!void {
-    try checkEpdRc(ffi.epd_full_update(clear_mode, keep_on));
+pub fn fullUpdate(clear_mode: i32, keep_on: i32) Error!void {
+    try checkEpdRc(ffi.epdFullUpdate(clear_mode, keep_on));
 }
 
-pub fn full_update_rect(clear_mode: i32, keep_on: i32, x: i32, y: i32, w: i32, h: i32) Error!void {
-    try checkEpdRc(ffi.epd_full_update_rect(clear_mode, keep_on, x, y, w, h));
+pub fn fullUpdateRect(clear_mode: i32, keep_on: i32, x: i32, y: i32, w: i32, h: i32) Error!void {
+    try checkEpdRc(ffi.epdFullUpdateRect(clear_mode, keep_on, x, y, w, h));
 }
 
-pub fn partial_update(keep_on: i32, start_row: i32, end_row: i32) Error!void {
-    try checkEpdRc(ffi.epd_partial_update(keep_on, start_row, end_row));
+pub fn partialUpdate(keep_on: i32, start_row: i32, end_row: i32) Error!void {
+    try checkEpdRc(ffi.epdPartialUpdate(keep_on, start_row, end_row));
 }
 
-pub fn smooth_update(keep_on: i32, color: i32) Error!void {
-    try checkEpdRc(ffi.epd_smooth_update(keep_on, color));
+pub fn smoothUpdate(keep_on: i32, color: i32) Error!void {
+    try checkEpdRc(ffi.epdSmoothUpdate(keep_on, color));
 }
 
-pub fn clear_white(keep_on: i32) Error!void {
-    try checkEpdRc(ffi.epd_clear_white(keep_on));
+pub fn clearWhite(keep_on: i32) Error!void {
+    try checkEpdRc(ffi.epdClearWhite(keep_on));
 }
 
-pub fn clear_black(keep_on: i32) Error!void {
-    try checkEpdRc(ffi.epd_clear_black(keep_on));
+pub fn clearBlack(keep_on: i32) Error!void {
+    try checkEpdRc(ffi.epdClearBlack(keep_on));
 }
 
-pub fn backup_plane() Error!void {
-    try errors.check(ffi.epd_backup_plane());
+pub fn backupPlane() Error!void {
+    try errors.check(ffi.epdBackupPlane());
 }
 
-pub fn invert_rect(x: i32, y: i32, w: i32, h: i32) Error!void {
-    try errors.check(ffi.epd_invert_rect(x, y, w, h));
+pub fn invertRect(x: i32, y: i32, w: i32, h: i32) Error!void {
+    try errors.check(ffi.epdInvertRect(x, y, w, h));
 }
 
-pub fn io_pin_mode(pin: i32, pin_mode: i32) Error!void {
-    try errors.check(ffi.epd_io_pin_mode(pin, pin_mode));
+pub fn ioPinMode(pin: i32, pin_mode: i32) Error!void {
+    try errors.check(ffi.epdIoPinMode(pin, pin_mode));
 }
 
-pub fn io_write(pin: i32, value: i32) Error!void {
-    try errors.check(ffi.epd_io_write(pin, value));
+pub fn ioWrite(pin: i32, value: i32) Error!void {
+    try errors.check(ffi.epdIoWrite(pin, value));
 }
 
-pub fn io_read(pin: i32) Error!u8 {
-    const rc = ffi.epd_io_read(pin);
+pub fn ioRead(pin: i32) Error!u8 {
+    const rc = ffi.epdIoRead(pin);
     if (rc < 0) return errors.fromCode(rc);
     if (rc > 255) return Error.Unknown;
     return @intCast(rc);
 }
 
-pub fn eink_power(on: i32) Error!void {
-    try checkEpdRc(ffi.epd_eink_power(on));
+pub fn einkPower(on: i32) Error!void {
+    try checkEpdRc(ffi.epdEinkPower(on));
 }
 
-pub fn load_bmp(data: []const u8, x: i32, y: i32, fg: i32, bg: i32) Error!void {
-    try checkEpdRc(ffi.epd_load_bmp(data.ptr, data.len, x, y, fg, bg));
+pub fn loadBmp(data: []const u8, x: i32, y: i32, fg: i32, bg: i32) Error!void {
+    try checkEpdRc(ffi.epdLoadBmp(data.ptr, data.len, x, y, fg, bg));
 }
 
-pub fn load_g5_image(data: []const u8, x: i32, y: i32, fg: i32, bg: i32, scale: f32) Error!void {
-    try checkEpdRc(ffi.epd_load_g5_image(data.ptr, data.len, x, y, fg, bg, scale));
+pub fn loadG5Image(data: []const u8, x: i32, y: i32, fg: i32, bg: i32, scale: f32) Error!void {
+    try checkEpdRc(ffi.epdLoadG5Image(data.ptr, data.len, x, y, fg, bg, scale));
 }
 
-pub fn set_passes(partial_passes: i32, full_passes: i32) Error!void {
-    try errors.check(ffi.epd_set_passes(partial_passes, full_passes));
+pub fn setPasses(partial_passes: i32, full_passes: i32) Error!void {
+    try errors.check(ffi.epdSetPasses(partial_passes, full_passes));
 }
 
 pub fn deinit() Error!void {
-    try errors.check(ffi.epd_deinit());
+    try errors.check(ffi.epdDeinit());
 }

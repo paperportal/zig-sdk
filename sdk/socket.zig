@@ -52,7 +52,7 @@ pub const Socket = struct {
     fd: i32,
 
     pub fn open(domain: Domain, socket_type: SocketType, protocol: i32) Error!Socket {
-        const fd = ffi.sock_socket(@intFromEnum(domain), @intFromEnum(socket_type), protocol);
+        const fd = ffi.sockSocket(@intFromEnum(domain), @intFromEnum(socket_type), protocol);
         if (fd < 0) return errors.fromCode(fd);
         return .{ .fd = fd };
     }
@@ -66,7 +66,7 @@ pub const Socket = struct {
     /// `timeout_ms` is applied only when `timeout_ms > 0`.
     pub fn connect(self: *Socket, addr: SocketAddr, timeout_ms: i32) Error!void {
         if (self.fd < 0) return Error.InvalidArgument;
-        const rc = ffi.sock_connect(
+        const rc = ffi.sockConnect(
             self.fd,
             @as([*]const u8, @ptrCast(&addr)),
             @intCast(@sizeOf(SocketAddr)),
@@ -77,13 +77,13 @@ pub const Socket = struct {
 
     pub fn bind(self: *Socket, addr: SocketAddr) Error!void {
         if (self.fd < 0) return Error.InvalidArgument;
-        const rc = ffi.sock_bind(self.fd, @as([*]const u8, @ptrCast(&addr)), @intCast(@sizeOf(SocketAddr)));
+        const rc = ffi.sockBind(self.fd, @as([*]const u8, @ptrCast(&addr)), @intCast(@sizeOf(SocketAddr)));
         try errors.check(rc);
     }
 
     pub fn listen(self: *Socket, backlog: i32) Error!void {
         if (self.fd < 0) return Error.InvalidArgument;
-        try errors.check(ffi.sock_listen(self.fd, backlog));
+        try errors.check(ffi.sockListen(self.fd, backlog));
     }
 
     pub const AcceptResult = struct {
@@ -95,7 +95,7 @@ pub const Socket = struct {
     ///
     /// This is a blocking call; there is currently no poll/select API exposed.
     pub fn accept(self: *Socket) Error!AcceptResult {
-        return self.accept_with_timeout(-1);
+        return self.acceptWithTimeout(-1);
     }
 
     /// Accepts a new connection with timeout control.
@@ -103,11 +103,11 @@ pub const Socket = struct {
     /// `timeout_ms == 0` performs a non-blocking poll.
     /// `timeout_ms > 0` waits up to that duration.
     /// `timeout_ms < 0` blocks until a client arrives.
-    pub fn accept_with_timeout(self: *Socket, timeout_ms: i32) Error!AcceptResult {
+    pub fn acceptWithTimeout(self: *Socket, timeout_ms: i32) Error!AcceptResult {
         if (self.fd < 0) return Error.InvalidArgument;
 
         var addr: SocketAddr = undefined;
-        const client_fd = ffi.sock_accept_with_timeout(
+        const client_fd = ffi.sockAcceptWithTimeout(
             self.fd,
             @as([*]u8, @ptrCast(&addr)),
             @intCast(@sizeOf(SocketAddr)),
@@ -124,7 +124,7 @@ pub const Socket = struct {
     pub fn send(self: *Socket, data: []const u8, timeout_ms: i32) Error!usize {
         if (self.fd < 0) return Error.InvalidArgument;
         if (data.len == 0) return 0;
-        const rc = ffi.sock_send(self.fd, data.ptr, @intCast(data.len), timeout_ms);
+        const rc = ffi.sockSend(self.fd, data.ptr, @intCast(data.len), timeout_ms);
         if (rc < 0) return errors.fromCode(rc);
         return @intCast(rc);
     }
@@ -135,7 +135,7 @@ pub const Socket = struct {
     pub fn recv(self: *Socket, out: []u8, timeout_ms: i32) Error!usize {
         if (self.fd < 0) return Error.InvalidArgument;
         if (out.len == 0) return 0;
-        const rc = ffi.sock_recv(self.fd, out.ptr, @intCast(out.len), timeout_ms);
+        const rc = ffi.sockRecv(self.fd, out.ptr, @intCast(out.len), timeout_ms);
         if (rc < 0) return errors.fromCode(rc);
         return @intCast(rc);
     }
@@ -144,6 +144,6 @@ pub const Socket = struct {
         if (self.fd < 0) return;
         const fd = self.fd;
         self.fd = -1;
-        try errors.check(ffi.sock_close(fd));
+        try errors.check(ffi.sockClose(fd));
     }
 };

@@ -23,31 +23,31 @@ fn copyBytesTo(comptime T: type, bytes: []const u8) T {
 }
 
 pub fn begin() Error!void {
-    try errors.check(ffi.imu_begin());
+    try errors.check(ffi.imuBegin());
 }
 
-pub fn is_enabled() bool {
-    return ffi.imu_is_enabled() > 0;
+pub fn isEnabled() bool {
+    return ffi.imuIsEnabled() > 0;
 }
 
 pub fn update() Error!void {
-    try errors.check(ffi.imu_update());
+    try errors.check(ffi.imuUpdate());
 }
 
-pub fn get_accel() Error!Vec3 {
+pub fn getAccel() Error!Vec3 {
     var buf: [@sizeOf(Vec3)]u8 = undefined;
-    try errors.check(ffi.imu_get_accel(&buf, buf.len));
+    try errors.check(ffi.imuGetAccel(&buf, buf.len));
     return copyBytesTo(Vec3, buf[0..]);
 }
 
-pub fn get_gyro() Error!Vec3 {
+pub fn getGyro() Error!Vec3 {
     var buf: [@sizeOf(Vec3)]u8 = undefined;
-    try errors.check(ffi.imu_get_gyro(&buf, buf.len));
+    try errors.check(ffi.imuGetGyro(&buf, buf.len));
     return copyBytesTo(Vec3, buf[0..]);
 }
 
-pub fn get_temp() Error!Temp {
+pub fn getTemp() Error!Temp {
     var buf: [@sizeOf(Temp)]u8 = undefined;
-    try errors.check(ffi.imu_get_temp(&buf, buf.len));
+    try errors.check(ffi.imuGetTemp(&buf, buf.len));
     return copyBytesTo(Temp, buf[0..]);
 }

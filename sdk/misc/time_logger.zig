@@ -13,14 +13,14 @@ pub const TimeLogger = struct {
     }
 
     pub fn info(self: *const TimeLogger, comptime fmt: []const u8, args: anytype) void {
-        self.log_impl(.info, fmt, args);
+        self.logImpl(.info, fmt, args);
     }
 
     pub fn warn(self: *const TimeLogger, comptime fmt: []const u8, args: anytype) void {
-        self.log_impl(.warn, fmt, args);
+        self.logImpl(.warn, fmt, args);
     }
 
-    fn log_impl(self: *const TimeLogger, level: enum { info, warn }, comptime fmt: []const u8, args: anytype) void {
+    fn logImpl(self: *const TimeLogger, level: enum { info, warn }, comptime fmt: []const u8, args: anytype) void {
         var buf: [320]u8 = undefined;
 
         const elapsed_us: i64 = core.time.micros() - self.start_us;

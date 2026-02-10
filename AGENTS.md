@@ -17,5 +17,5 @@
 ## Coding Style & Naming Conventions
 
 - Formatting: rely on `zig fmt`; avoid manual alignment/spacing tweaks.
-- Naming (follow existing code): files `snake_case.zig`, types `PascalCase`, functions/fields `camelCase`, constants `SCREAMING_SNAKE_CASE` (e.g. `display.colors.BLACK`).
+- Naming (follow existing code): files `snake_case.zig`, types `PascalCase`, functions/fields `lowerCamelCase` (except functions that return a type (Zig), which use `PascalCase`), constants `SCREAMING_SNAKE_CASE` (e.g. `display.colors.BLACK`).
 - Keep the SDK as a thin wrapper over host FFI (`sdk/ffi.zig`): prefer small, well-named helpers over deep abstractions.

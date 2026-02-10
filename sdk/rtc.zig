@@ -17,16 +17,16 @@ pub const DateTime = struct {
 const DATE_TIME_SIZE: usize = 10;
 
 pub fn begin() Error!void {
-    try errors.check(ffi.rtc_begin());
+    try errors.check(ffi.rtcBegin());
 }
 
-pub fn is_enabled() bool {
-    return ffi.rtc_is_enabled() > 0;
+pub fn isEnabled() bool {
+    return ffi.rtcIsEnabled() > 0;
 }
 
-pub fn get_datetime() Error!DateTime {
+pub fn getDatetime() Error!DateTime {
     var buf: [DATE_TIME_SIZE]u8 = undefined;
-    try errors.check(ffi.rtc_get_datetime(&buf, buf.len));
+    try errors.check(ffi.rtcGetDatetime(&buf, buf.len));
 
     const year = std.mem.readInt(i16, buf[0..2], .little);
     return DateTime{
@@ -40,7 +40,7 @@ pub fn get_datetime() Error!DateTime {
     };
 }
 
-pub fn set_datetime(dt: DateTime) Error!void {
+pub fn setDatetime(dt: DateTime) Error!void {
     var buf: [DATE_TIME_SIZE]u8 = [_]u8{0} ** DATE_TIME_SIZE;
     std.mem.writeInt(i16, buf[0..2], dt.year, .little);
     buf[2] = dt.month;
@@ -51,17 +51,17 @@ pub fn set_datetime(dt: DateTime) Error!void {
     buf[7] = dt.second;
     buf[8] = 0;
     buf[9] = 0;
-    try errors.check(ffi.rtc_set_datetime(&buf, buf.len));
+    try errors.check(ffi.rtcSetDatetime(&buf, buf.len));
 }
 
-pub fn set_timer_irq(ms: i32) Error!void {
-    try errors.check(ffi.rtc_set_timer_irq(ms));
+pub fn setTimerIrq(ms: i32) Error!void {
+    try errors.check(ffi.rtcSetTimerIrq(ms));
 }
 
-pub fn set_alarm_irq(seconds: i32) Error!void {
-    try errors.check(ffi.rtc_set_alarm_irq(seconds));
+pub fn setAlarmIrq(seconds: i32) Error!void {
+    try errors.check(ffi.rtcSetAlarmIrq(seconds));
 }
 
-pub fn clear_irq() Error!void {
-    try errors.check(ffi.rtc_clear_irq());
+pub fn clearIrq() Error!void {
+    try errors.check(ffi.rtcClearIrq());
 }

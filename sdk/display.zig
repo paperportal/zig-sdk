@@ -128,14 +128,14 @@ pub const rotation = struct {
     /// Note: this returns the raw firmware result; if the display is not ready, the return value may be a
     /// negative WASM error code.
     pub fn get() i32 {
-        return ffi.get_rotation();
+        return ffi.getRotation();
     }
 
     /// Set the display rotation.
     ///
     /// `rot` must be in the range `0..3`.
     pub fn set(rot: i32) Error!void {
-        try errors.check(ffi.set_rotation(rot));
+        try errors.check(ffi.setRotation(rot));
     }
 };
 
@@ -146,14 +146,14 @@ pub const brightness = struct {
     /// Note: this returns the raw firmware result; if the display is not ready, the return value may be a
     /// negative WASM error code.
     pub fn get() i32 {
-        return ffi.get_brightness();
+        return ffi.getBrightness();
     }
 
     /// Set the display brightness.
     ///
     /// `v` must be in the range `0..255`.
     pub fn set(v: i32) Error!void {
-        try errors.check(ffi.set_brightness(v));
+        try errors.check(ffi.setBrightness(v));
     }
 };
 
@@ -163,20 +163,20 @@ pub fn clear() Error!void {
 }
 
 /// Fill the display back buffer with `color`.
-pub fn fill_screen(color: Color) Error!void {
-    try errors.check(ffi.fill_screen(color));
+pub fn fillScreen(color: Color) Error!void {
+    try errors.check(ffi.fillScreen(color));
 }
 
 /// Begin a batch of drawing operations.
 ///
 /// Pair with `end_write()` when done.
-pub fn start_write() Error!void {
-    try errors.check(ffi.start_write());
+pub fn startWrite() Error!void {
+    try errors.check(ffi.startWrite());
 }
 
 /// End a batch of drawing operations started with `start_write()`.
-pub fn end_write() Error!void {
-    try errors.check(ffi.end_write());
+pub fn endWrite() Error!void {
+    try errors.check(ffi.endWrite());
 }
 
 /// Trigger a display refresh using the current back buffer.
@@ -187,15 +187,15 @@ pub fn update() Error!void {
 /// Trigger a display refresh for a rectangular region.
 ///
 /// All arguments must be non-negative, and the rectangle must be fully within the display bounds.
-pub fn update_rect(x: i32, y: i32, w: i32, h: i32) Error!void {
-    try errors.check(ffi.display_rect(x, y, w, h));
+pub fn updateRect(x: i32, y: i32, w: i32, h: i32) Error!void {
+    try errors.check(ffi.displayRect(x, y, w, h));
 }
 
 /// Block until the last display refresh completes.
 ///
 /// This wrapper intentionally ignores the firmware return code.
-pub fn wait_update() void {
-    _ = ffi.wait_display();
+pub fn waitUpdate() void {
+    _ = ffi.waitDisplay();
 }
 
 /// E-paper refresh mode controls.
@@ -212,48 +212,48 @@ pub const epd = struct {
     /// Set the current EPD refresh mode.
     ///
     /// `mode` must be in the range `1..4` (see the constants in this struct).
-    pub fn set_mode(mode: i32) Error!void {
-        try errors.check(ffi.set_epd_mode(mode));
+    pub fn setMode(mode: i32) Error!void {
+        try errors.check(ffi.setEpdMode(mode));
     }
 
     /// Get the current EPD refresh mode (`1..4`).
     ///
     /// Note: this returns the raw firmware result; if the display is not ready, the return value may be a
     /// negative WASM error code.
-    pub fn get_mode() i32 {
-        return ffi.get_epd_mode();
+    pub fn getMode() i32 {
+        return ffi.getEpdMode();
     }
 };
 
 /// Draw a single pixel into the back buffer.
-pub fn draw_pixel(x: i32, y: i32, color: Color) Error!void {
-    try errors.check(ffi.draw_pixel(x, y, color));
+pub fn drawPixel(x: i32, y: i32, color: Color) Error!void {
+    try errors.check(ffi.drawPixel(x, y, color));
 }
 
 /// Draw a rectangle outline into the back buffer.
 ///
 /// `w` and `h` must be non-negative.
-pub fn draw_rect(x: i32, y: i32, w: i32, h: i32, color: Color) Error!void {
-    try errors.check(ffi.draw_rect(x, y, w, h, color));
+pub fn drawRect(x: i32, y: i32, w: i32, h: i32, color: Color) Error!void {
+    try errors.check(ffi.drawRect(x, y, w, h, color));
 }
 
 /// Fill a rectangle in the back buffer.
 ///
 /// `w` and `h` must be non-negative.
-pub fn fill_rect(x: i32, y: i32, w: i32, h: i32, color: Color) Error!void {
-    try errors.check(ffi.fill_rect(x, y, w, h, color));
+pub fn fillRect(x: i32, y: i32, w: i32, h: i32, color: Color) Error!void {
+    try errors.check(ffi.fillRect(x, y, w, h, color));
 }
 
 /// Draw a fast horizontal line into the back buffer.
 ///
 /// `w` must be non-negative.
-pub fn draw_fast_hline(x: i32, y: i32, w: i32, color: Color) Error!void {
-    try errors.check(ffi.draw_fast_hline(x, y, w, color));
+pub fn drawFastHline(x: i32, y: i32, w: i32, color: Color) Error!void {
+    try errors.check(ffi.drawFastHline(x, y, w, color));
 }
 
 /// Draw a line into the back buffer.
-pub fn draw_line(x0: i32, y0: i32, x1: i32, y1: i32, color: Color) Error!void {
-    try errors.check(ffi.draw_line(x0, y0, x1, y1, color));
+pub fn drawLine(x0: i32, y0: i32, x1: i32, y1: i32, color: Color) Error!void {
+    try errors.check(ffi.drawLine(x0, y0, x1, y1, color));
 }
 
 /// Fill an arc / ring segment.
@@ -262,8 +262,8 @@ pub fn draw_line(x0: i32, y0: i32, x1: i32, y1: i32, color: Color) Error!void {
 /// - `r0` is the outer radius in pixels
 /// - `r1` is the inner radius in pixels
 /// - `angle0` / `angle1` are degrees (clockwise, with `0` at 3 o'clock)
-pub fn fill_arc(x: i32, y: i32, r0: i32, r1: i32, angle0: f32, angle1: f32, color: Color) Error!void {
-    try errors.check(ffi.fill_arc(x, y, r0, r1, angle0, angle1, color));
+pub fn fillArc(x: i32, y: i32, r0: i32, r1: i32, angle0: f32, angle1: f32, color: Color) Error!void {
+    try errors.check(ffi.fillArc(x, y, r0, r1, angle0, angle1, color));
 }
 
 /// Text rendering APIs.
@@ -304,29 +304,29 @@ pub const text = struct {
     };
 
     /// Set the text cursor position.
-    pub fn set_cursor(x: i32, y: i32) Error!void {
-        try errors.check(ffi.set_cursor(x, y));
+    pub fn setCursor(x: i32, y: i32) Error!void {
+        try errors.check(ffi.setCursor(x, y));
     }
 
     /// Set the foreground (`fg`) and optional background (`bg`) text colors.
     ///
     /// If `bg` is `null`, the firmware is instructed to render with no background color.
-    pub fn set_color(fg: Color, bg: ?Color) Error!void {
+    pub fn setColor(fg: Color, bg: ?Color) Error!void {
         const bg_value = if (bg) |c| c else 0;
         const use_bg: i32 = if (bg != null) 1 else 0;
-        try errors.check(ffi.set_text_color(fg, bg_value, use_bg));
+        try errors.check(ffi.setTextColor(fg, bg_value, use_bg));
     }
 
     /// Set the text size scaling factors.
     ///
     /// Both `sx` and `sy` must be greater than `0`.
-    pub fn set_size(sx: f32, sy: f32) Error!void {
-        try errors.check(ffi.set_text_size(sx, sy));
+    pub fn setSize(sx: f32, sy: f32) Error!void {
+        try errors.check(ffi.setTextSize(sx, sy));
     }
 
     /// Set the text datum (anchor point).
-    pub fn set_datum(datum: Datum) Error!void {
-        try errors.check(ffi.set_text_datum(@intFromEnum(datum)));
+    pub fn setDatum(datum: Datum) Error!void {
+        try errors.check(ffi.setTextDatum(@intFromEnum(datum)));
     }
 
     /// Select one of the built-in fonts.
@@ -336,53 +336,53 @@ pub const text = struct {
     /// - `1`: `fonts::AsciiFont8x16`
     /// - `2`: `fonts::AsciiFont24x48`
     /// - `3`: `fonts::TomThumb`
-    pub fn set_font(font_id: i32) Error!void {
-        try errors.check(ffi.set_text_font(font_id));
+    pub fn setFont(font_id: i32) Error!void {
+        try errors.check(ffi.setTextFont(font_id));
     }
 
     /// Enable/disable wrapping in the X and Y directions.
-    pub fn set_wrap(wrap_x: bool, wrap_y: bool) Error!void {
-        try errors.check(ffi.set_text_wrap(@intFromBool(wrap_x), @intFromBool(wrap_y)));
+    pub fn setWrap(wrap_x: bool, wrap_y: bool) Error!void {
+        try errors.check(ffi.setTextWrap(@intFromBool(wrap_x), @intFromBool(wrap_y)));
     }
 
     /// Enable/disable text scrolling behavior.
-    pub fn set_scroll(scroll: bool) Error!void {
-        try errors.check(ffi.set_text_scroll(@intFromBool(scroll)));
+    pub fn setScroll(scroll: bool) Error!void {
+        try errors.check(ffi.setTextScroll(@intFromBool(scroll)));
     }
 
     /// Convenience helper: enable UTF-8 decoding and disable CP437.
-    pub fn set_encoding_utf8() Error!void {
-        try errors.check(ffi.set_text_encoding(1, 0));
+    pub fn setEncodingUtf8() Error!void {
+        try errors.check(ffi.setTextEncoding(1, 0));
     }
 
     /// Convenience helper: enable CP437 decoding and disable UTF-8.
-    pub fn set_encoding_cp437() Error!void {
-        try errors.check(ffi.set_text_encoding(0, 1));
+    pub fn setEncodingCp437() Error!void {
+        try errors.check(ffi.setTextEncoding(0, 1));
     }
 
     /// Configure text encoding switches.
-    pub fn set_encoding(utf8: bool, cp437: bool) Error!void {
-        try errors.check(ffi.set_text_encoding(@intFromBool(utf8), @intFromBool(cp437)));
+    pub fn setEncoding(utf8: bool, cp437: bool) Error!void {
+        try errors.check(ffi.setTextEncoding(@intFromBool(utf8), @intFromBool(cp437)));
     }
 
     /// Draw a NUL-terminated string at (`x`, `y`).
     ///
     /// The firmware returns the rendered width, but this wrapper discards it.
-    pub fn draw_cstr(text_cstr: [:0]const u8, x: i32, y: i32) Error!void {
-        _ = try errors.checkI32(ffi.draw_string(text_cstr, x, y));
+    pub fn drawCstr(text_cstr: [:0]const u8, x: i32, y: i32) Error!void {
+        _ = try errors.checkI32(ffi.drawString(text_cstr, x, y));
     }
 
     /// Measure the width (in pixels) of a NUL-terminated string using the current font settings.
-    pub fn text_width(text_cstr: [:0]const u8) Error!i32 {
-        return errors.checkI32(ffi.text_width(text_cstr));
+    pub fn textWidth(text_cstr: [:0]const u8) Error!i32 {
+        return errors.checkI32(ffi.textWidth(text_cstr));
     }
 
     /// Get the current font height (in pixels).
     ///
     /// Note: this returns the raw firmware result; if the display is not ready, the return value may be a
     /// negative WASM error code.
-    pub fn font_height() i32 {
-        return ffi.font_height();
+    pub fn fontHeight() i32 {
+        return ffi.fontHeight();
     }
 
     /// Draw a byte slice as text at (`x`, `y`).
@@ -394,7 +394,7 @@ pub const text = struct {
         const max_copy = @min(text_bytes.len, buf.len - 1);
         std.mem.copyForwards(u8, buf[0..max_copy], text_bytes[0..max_copy]);
         buf[max_copy] = 0;
-        try draw_cstr(buf[0..max_copy :0], x, y);
+        try drawCstr(buf[0..max_copy :0], x, y);
     }
 };
 
@@ -404,8 +404,8 @@ pub const image = struct {
     ///
     /// `x` and `y` must be non-negative. Empty input is a no-op.
     /// The firmware rejects PNG inputs larger than 1 MiB.
-    pub fn draw_png(x: i32, y: i32, png_bytes: []const u8) Error!void {
-        try errors.check(ffi.draw_png(png_bytes.ptr, png_bytes.len, x, y));
+    pub fn drawPng(x: i32, y: i32, png_bytes: []const u8) Error!void {
+        try errors.check(ffi.drawPng(png_bytes.ptr, png_bytes.len, x, y));
     }
 
     /// Push raw pixel data to the display.
@@ -423,7 +423,7 @@ pub const image = struct {
     /// - `data.len` matches the expected byte length for `w*h` at the chosen bit depth.
     /// - For 16bpp and 32bpp formats, `data.ptr` must be 2-byte or 4-byte aligned, respectively.
     /// - When a palette is required, `palette_rgb888` must have the exact entry count and be 4-byte aligned.
-    pub fn push_image(
+    pub fn pushImage(
         x: i32,
         y: i32,
         w: i32,
@@ -438,51 +438,51 @@ pub const image = struct {
             null;
 
         const pal_bytes: []const u8 = if (palette_rgb888) |pal| std.mem.sliceAsBytes(pal) else &[_]u8{};
-        try errors.check(ffi.push_image(x, y, w, h, data.ptr, data.len, depth, pal_ptr, pal_bytes.len));
+        try errors.check(ffi.pushImage(x, y, w, h, data.ptr, data.len, depth, pal_ptr, pal_bytes.len));
     }
 
     /// Decode and draw an XTH (XTEINK) image, centered on the display.
     ///
     /// Empty input is a no-op. The firmware rejects inputs larger than 1 MiB.
-    pub fn draw_xth_centered(xth_bytes: []const u8) Error!void {
-        try errors.check(ffi.draw_xth_centered(xth_bytes.ptr, xth_bytes.len));
+    pub fn drawXthCentered(xth_bytes: []const u8) Error!void {
+        try errors.check(ffi.drawXthCentered(xth_bytes.ptr, xth_bytes.len));
     }
 
     /// Decode and draw an XTG (XTEINK, monochrome 1bpp) image, centered on the display.
     ///
     /// Empty input is a no-op. The firmware rejects inputs larger than 1 MiB.
-    pub fn draw_xtg_centered(xtg_bytes: []const u8) Error!void {
-        try errors.check(ffi.draw_xtg_centered(xtg_bytes.ptr, xtg_bytes.len));
+    pub fn drawXtgCentered(xtg_bytes: []const u8) Error!void {
+        try errors.check(ffi.drawXtgCentered(xtg_bytes.ptr, xtg_bytes.len));
     }
 
     /// Decode and draw a JPEG, fitting it within (`max_w`, `max_h`) starting at (`x`, `y`).
     ///
     /// `x`, `y`, `max_w`, and `max_h` must be non-negative. If `jpg_bytes` is empty or `max_w/max_h` are zero,
     /// this is a no-op. The firmware rejects JPEG inputs larger than 1 MiB.
-    pub fn draw_jpg_fit(x: i32, y: i32, max_w: i32, max_h: i32, jpg_bytes: []const u8) Error!void {
-        try errors.check(ffi.draw_jpg_fit(jpg_bytes.ptr, jpg_bytes.len, x, y, max_w, max_h));
+    pub fn drawJpgFit(x: i32, y: i32, max_w: i32, max_h: i32, jpg_bytes: []const u8) Error!void {
+        try errors.check(ffi.drawJpgFit(jpg_bytes.ptr, jpg_bytes.len, x, y, max_w, max_h));
     }
 
     /// Decode and draw a PNG, fitting it within (`max_w`, `max_h`) starting at (`x`, `y`).
     ///
     /// `x`, `y`, `max_w`, and `max_h` must be non-negative. If `png_bytes` is empty or `max_w/max_h` are zero,
     /// this is a no-op. The firmware rejects PNG inputs larger than 1 MiB.
-    pub fn draw_png_fit(x: i32, y: i32, max_w: i32, max_h: i32, png_bytes: []const u8) Error!void {
-        try errors.check(ffi.draw_png_fit(png_bytes.ptr, png_bytes.len, x, y, max_w, max_h));
+    pub fn drawPngFit(x: i32, y: i32, max_w: i32, max_h: i32, png_bytes: []const u8) Error!void {
+        try errors.check(ffi.drawPngFit(png_bytes.ptr, png_bytes.len, x, y, max_w, max_h));
     }
 
     /// Decode and draw a JPEG from a file path, fitting it within (`max_w`, `max_h`) starting at (`x`, `y`).
     ///
     /// `x`, `y`, `max_w`, and `max_h` must be non-negative. If `max_w` or `max_h` are zero, this is a no-op.
-    pub fn draw_jpg_file(path_cstr: [:0]const u8, x: i32, y: i32, max_w: i32, max_h: i32) Error!void {
-        try errors.check(ffi.draw_jpg_file(path_cstr, x, y, max_w, max_h));
+    pub fn drawJpgFile(path_cstr: [:0]const u8, x: i32, y: i32, max_w: i32, max_h: i32) Error!void {
+        try errors.check(ffi.drawJpgFile(path_cstr, x, y, max_w, max_h));
     }
 
     /// Decode and draw a PNG from a file path, fitting it within (`max_w`, `max_h`) starting at (`x`, `y`).
     ///
     /// `x`, `y`, `max_w`, and `max_h` must be non-negative. If `max_w` or `max_h` are zero, this is a no-op.
-    pub fn draw_png_file(path_cstr: [:0]const u8, x: i32, y: i32, max_w: i32, max_h: i32) Error!void {
-        try errors.check(ffi.draw_png_file(path_cstr, x, y, max_w, max_h));
+    pub fn drawPngFile(path_cstr: [:0]const u8, x: i32, y: i32, max_w: i32, max_h: i32) Error!void {
+        try errors.check(ffi.drawPngFile(path_cstr, x, y, max_w, max_h));
     }
 };
 
@@ -501,28 +501,28 @@ pub const vlw = struct {
     ///
     /// The firmware rejects zero-length inputs and inputs larger than 1 MiB.
     pub fn register(font_bytes: []const u8) Error!i32 {
-        return errors.checkI32(ffi.vlw_register(font_bytes.ptr, font_bytes.len));
+        return errors.checkI32(ffi.vlwRegister(font_bytes.ptr, font_bytes.len));
     }
 
     /// Load a previously registered Vlw font by handle.
     ///
     /// This unloads any currently loaded font before loading the new one.
     pub fn use(handle: i32) Error!void {
-        try errors.check(ffi.vlw_use(handle));
+        try errors.check(ffi.vlwUse(handle));
     }
 
     /// Load one of the firmware-provided VLW fonts.
-    pub fn use_system(font: SystemFont) Error!void {
-        try errors.check(ffi.vlw_use_system(@intFromEnum(font)));
+    pub fn useSystem(font: SystemFont) Error!void {
+        try errors.check(ffi.vlwUseSystem(@intFromEnum(font)));
     }
 
     /// Unload the currently loaded Vlw font (if any).
     pub fn unload() Error!void {
-        try errors.check(ffi.vlw_unload());
+        try errors.check(ffi.vlwUnload());
     }
 
     /// Unload the current font and free all registered Vlw fonts.
-    pub fn clear_all() Error!void {
-        try errors.check(ffi.vlw_clear_all());
+    pub fn clearAll() Error!void {
+        try errors.check(ffi.vlwClearAll());
     }
 };

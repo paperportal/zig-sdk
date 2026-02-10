@@ -3,9 +3,9 @@ const std = @import("std");
 /// Display/UI primitives built on top of Paper Portal's gesture callbacks.
 ///
 /// This module is pure Zig (no host FFI). Apps are expected to:
-/// - Set an initial scene in `pp_init` (use `SceneStack.setInitial()` or `reset()`).
-/// - Forward `pp_on_gesture` to `SceneStack.handleGestureFromArgs()`.
-/// - Optionally forward `pp_tick` to `SceneStack.tick()`.
+/// - Set an initial scene in `ppInit` (use `SceneStack.setInitial()` or `reset()`).
+/// - Forward `ppOnGesture` to `SceneStack.handleGestureFromArgs()`.
+/// - Optionally forward `ppTick` to `SceneStack.tick()`.
 pub const Context = struct {
     allocator: std.mem.Allocator,
     screen_w: i32,

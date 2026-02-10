@@ -20,8 +20,8 @@ pub const Error = errors.Error;
 
 comptime {
     const exports = @import("sdk/internal/exports.zig");
-    @export(&exports.portal_contract_version, .{ .name = "portal_contract_version", .linkage = .strong });
-    @export(&exports.portal_alloc, .{ .name = "portal_alloc", .linkage = .strong });
-    @export(&exports.portal_free, .{ .name = "portal_free", .linkage = .strong });
+    @export(&exports.portalContractVersion, .{ .name = "portalContractVersion", .linkage = .strong });
+    @export(&exports.portalAlloc, .{ .name = "portalAlloc", .linkage = .strong });
+    @export(&exports.portalFree, .{ .name = "portalFree", .linkage = .strong });
     //@export(&exports.portal_init, .{ .name = "portal_init", .linkage = .strong });
 }

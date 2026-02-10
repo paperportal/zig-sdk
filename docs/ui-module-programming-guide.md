@@ -1,6 +1,6 @@
 # `paper_portal_sdk.ui`
 
-Scene-stack UI helpers for Paper Portal WASM apps. This module is pure Zig (no host FFI) and is meant to sit on top of the host callback surface (`pp_init`, `pp_on_gesture`, `pp_tick`).
+Scene-stack UI helpers for Paper Portal WASM apps. This module is pure Zig (no host FFI) and is meant to sit on top of the host callback surface (`ppInit`, `ppOnGesture`, `ppTick`).
 
 The SDK entrypoint re-exports this module as `sdk.ui`:
 
@@ -14,10 +14,10 @@ const ui = sdk.ui;
 This is the minimal wiring:
 
 - Create your scenes as app-owned structs.
-- In `pp_init`, create a `ui.SceneStack` and set the initial scene.
-- In `pp_on_gesture`, forward the args to `SceneStack.handleGestureFromArgs`.
-- (Optional) In `pp_tick`, forward to `SceneStack.tick` if you need animations/time-based updates.
-- (Optional) In `pp_shutdown`, call `SceneStack.deinit()` to free the internal stack storage.
+- In `ppInit`, create a `ui.SceneStack` and set the initial scene.
+- In `ppOnGesture`, forward the args to `SceneStack.handleGestureFromArgs`.
+- (Optional) In `ppTick`, forward to `SceneStack.tick` if you need animations/time-based updates.
+- (Optional) In `ppShutdown`, call `SceneStack.deinit()` to free the internal stack storage.
 
 ```zig
 const std = @import("std");
@@ -50,7 +50,7 @@ const MainScene = struct {
 var g_stack: ui.SceneStack = undefined;
 var g_main: MainScene = .{};
 
-pub export fn pp_init(api_version: i32, screen_w: i32, screen_h: i32, args_ptr: i32, args_len: i32) i32 {
+pub export fn ppInit(api_version: i32, screen_w: i32, screen_h: i32, args_ptr: i32, args_len: i32) i32 {
     _ = api_version;
     _ = args_ptr;
     _ = args_len;
@@ -62,17 +62,17 @@ pub export fn pp_init(api_version: i32, screen_w: i32, screen_h: i32, args_ptr: 
     return 0;
 }
 
-pub export fn pp_on_gesture(kind: i32, x: i32, y: i32, dx: i32, dy: i32, duration_ms: i32, now_ms: i32, flags: i32) i32 {
+pub export fn ppOnGesture(kind: i32, x: i32, y: i32, dx: i32, dy: i32, duration_ms: i32, now_ms: i32, flags: i32) i32 {
     g_stack.handleGestureFromArgs(kind, x, y, dx, dy, duration_ms, now_ms, flags) catch {};
     return 0;
 }
 
-pub export fn pp_tick(now_ms: i32) i32 {
+pub export fn ppTick(now_ms: i32) i32 {
     g_stack.tick(now_ms) catch {};
     return 0;
 }
 
-pub export fn pp_shutdown() i32 {
+pub export fn ppShutdown() i32 {
     g_stack.deinit();
     return 0;
 }
@@ -178,4 +178,4 @@ try g_stack.handleGesture(ev);
   - `SceneStack.StackError` for stack-state issues (e.g. `AlreadyInitialized`, `CannotPopRoot`)
   - plus anything your scene callbacks return (and any `sdk.*` errors you propagate)
 
-If you ignore errors in `pp_on_gesture`, prefer logging them (or at least leaving them visible during development) so you can catch bugs early.
+If you ignore errors in `ppOnGesture`, prefer logging them (or at least leaving them visible during development) so you can catch bugs early.
