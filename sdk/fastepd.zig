@@ -246,6 +246,26 @@ pub fn loadG5Image(data: []const u8, x: i32, y: i32, fg: i32, bg: i32, scale: f3
     try checkEpdRc(ffi.epdLoadG5Image(data.ptr, data.len, x, y, fg, bg, scale));
 }
 
+pub fn drawJpg(x: i32, y: i32, jpg_bytes: []const u8) Error!void {
+    try errors.check(ffi.epdDrawJpg(jpg_bytes.ptr, jpg_bytes.len, x, y));
+}
+
+/// Draw a JPEG decoded from RAM within `max_w` x `max_h`.
+/// The firmware uses JPEGDEC (grayscale + optional 4-bit dithering) and may downscale by 2/4/8 to fit.
+pub fn drawJpgFit(x: i32, y: i32, max_w: i32, max_h: i32, jpg_bytes: []const u8) Error!void {
+    try errors.check(ffi.epdDrawJpgFit(jpg_bytes.ptr, jpg_bytes.len, x, y, max_w, max_h));
+}
+
+pub fn drawPng(x: i32, y: i32, png_bytes: []const u8) Error!void {
+    try errors.check(ffi.epdDrawPng(png_bytes.ptr, png_bytes.len, x, y));
+}
+
+/// Draw a PNG decoded from RAM within `max_w` x `max_h`.
+/// Note: this currently clips to the rectangle (and the screen bounds); it does not scale.
+pub fn drawPngFit(x: i32, y: i32, max_w: i32, max_h: i32, png_bytes: []const u8) Error!void {
+    try errors.check(ffi.epdDrawPngFit(png_bytes.ptr, png_bytes.len, x, y, max_w, max_h));
+}
+
 pub fn setPasses(partial_passes: i32, full_passes: i32) Error!void {
     try errors.check(ffi.epdSetPasses(partial_passes, full_passes));
 }
