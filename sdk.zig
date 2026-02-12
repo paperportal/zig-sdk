@@ -2,7 +2,6 @@ pub const core = @import("sdk/core.zig");
 pub const devserver = @import("sdk/devserver.zig");
 pub const display = @import("sdk/display.zig");
 pub const errors = @import("sdk/error.zig");
-pub const fastepd = @import("sdk/fastepd.zig");
 pub const fs = @import("sdk/fs.zig");
 pub const gesture = @import("sdk/gesture.zig");
 pub const hal = @import("sdk/hal.zig");
