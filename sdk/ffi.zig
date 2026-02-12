@@ -260,6 +260,7 @@ pub extern "fast_epd" fn epdSetFont(font: i32) i32;
 pub extern "fast_epd" fn epdSetTextWrap(wrap: i32) i32;
 pub extern "fast_epd" fn epdDrawString(text: [*:0]const u8, x: i32, y: i32) i32;
 pub extern "fast_epd" fn epdGetStringBox(text: [*:0]const u8, out: [*]u8, out_len: i32) i32;
+pub extern "fast_epd" fn epdGetStringBoxUtf8(text: [*:0]const u8, out: [*]u8, out_len: i32) i32;
 pub extern "fast_epd" fn epdFullUpdate(clear_mode: i32, keep_on: i32) i32;
 pub extern "fast_epd" fn epdFullUpdateRect(clear_mode: i32, keep_on: i32, x: i32, y: i32, w: i32, h: i32) i32;
 pub extern "fast_epd" fn epdPartialUpdate(keep_on: i32, start_row: i32, end_row: i32) i32;
@@ -278,5 +279,6 @@ pub extern "fast_epd" fn epdDrawJpg(ptr: [*]const u8, len: usize, x: i32, y: i32
 pub extern "fast_epd" fn epdDrawJpgFit(ptr: [*]const u8, len: usize, x: i32, y: i32, max_w: i32, max_h: i32) i32;
 pub extern "fast_epd" fn epdDrawPng(ptr: [*]const u8, len: usize, x: i32, y: i32) i32;
 pub extern "fast_epd" fn epdDrawPngFit(ptr: [*]const u8, len: usize, x: i32, y: i32, max_w: i32, max_h: i32) i32;
+pub extern "fast_epd" fn epdDrawPngFileFit(path: [*:0]const u8, x: i32, y: i32, max_w: i32, max_h: i32) i32;
 pub extern "fast_epd" fn epdSetPasses(partial_passes: i32, full_passes: i32) i32;
 pub extern "fast_epd" fn epdDeinit() i32;

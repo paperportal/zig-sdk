@@ -32,6 +32,29 @@ pub const mode = struct {
     pub const GRAYSCALE_4: i32 = MONOCHROME;
 };
 
+pub const colors = struct {
+    pub const WHITE: i32 = 255;
+    pub const BLACK: i32 = 0;
+    pub const LIGHT_GRAY: i32 = 200;
+    pub const TRANSPARENT_BG: i32 = -1;
+};
+
+pub const clear = struct {
+    pub const NONE: i32 = 0;
+    pub const FAST: i32 = 1;
+    pub const SLOW: i32 = 2;
+    pub const WHITE: i32 = 3;
+    pub const BLACK: i32 = 4;
+};
+
+pub const font = struct {
+    pub const FONT_6X8: i32 = 0;
+    pub const FONT_8X8: i32 = 1;
+    pub const FONT_12X16: i32 = 2;
+    pub const FONT_16X16: i32 = 3;
+    pub const INTER_MEDIUM_30: i32 = 100;
+};
+
 pub const speed = struct {
     pub const DEFAULT: i32 = 0;
     pub const SLOW: i32 = 10000000;
@@ -157,8 +180,8 @@ pub const text = struct {
         try errors.check(ffi.epdSetCursor(x, y));
     }
 
-    pub fn setFont(font: i32) Error!void {
-        try errors.check(ffi.epdSetFont(font));
+    pub fn setFont(font_id: i32) Error!void {
+        try errors.check(ffi.epdSetFont(font_id));
     }
 
     pub fn setWrap(wrap: bool) Error!void {
@@ -170,7 +193,7 @@ pub const text = struct {
     }
 
     pub fn draw(text_bytes: []const u8, x: i32, y: i32) Error!void {
-        var buf: [128]u8 = undefined;
+        var buf: [256]u8 = undefined;
         if (buf.len == 0) return Error.InvalidArgument;
         const max_copy = @min(text_bytes.len, buf.len - 1);
         std.mem.copyForwards(u8, buf[0..max_copy], text_bytes[0..max_copy]);
@@ -185,7 +208,31 @@ pub const text = struct {
         if (rc != @sizeOf(Rect)) return Error.Internal;
         return rect;
     }
+
+    pub fn getBoxUtf8(text_bytes: []const u8) Error!Rect {
+        var buf: [256]u8 = undefined;
+        if (buf.len == 0) return Error.InvalidArgument;
+        const max_copy = @min(text_bytes.len, buf.len - 1);
+        std.mem.copyForwards(u8, buf[0..max_copy], text_bytes[0..max_copy]);
+        buf[max_copy] = 0;
+
+        var rect: Rect = .{ .x = 0, .y = 0, .w = 0, .h = 0 };
+        const rc = ffi.epdGetStringBoxUtf8(buf[0..max_copy :0], @as([*]u8, @ptrCast(&rect)), @intCast(@sizeOf(Rect)));
+        if (rc < 0) return errors.fromCode(rc);
+        if (rc != @sizeOf(Rect)) return Error.Internal;
+        return rect;
+    }
 };
+
+pub fn textWidth(text_bytes: []const u8) Error!i32 {
+    const rect = try text.getBoxUtf8(text_bytes);
+    return rect.w;
+}
+
+pub fn fontLineHeight() Error!i32 {
+    const rect = try text.getBoxUtf8("Mg");
+    return rect.h;
+}
 
 pub fn fullUpdate(clear_mode: i32, keep_on: i32) Error!void {
     try checkEpdRc(ffi.epdFullUpdate(clear_mode, keep_on));
@@ -264,6 +311,10 @@ pub fn drawPng(x: i32, y: i32, png_bytes: []const u8) Error!void {
 /// Note: this currently clips to the rectangle (and the screen bounds); it does not scale.
 pub fn drawPngFit(x: i32, y: i32, max_w: i32, max_h: i32, png_bytes: []const u8) Error!void {
     try errors.check(ffi.epdDrawPngFit(png_bytes.ptr, png_bytes.len, x, y, max_w, max_h));
+}
+
+pub fn drawPngFileFit(path: [:0]const u8, x: i32, y: i32, max_w: i32, max_h: i32) Error!void {
+    try errors.check(ffi.epdDrawPngFileFit(path, x, y, max_w, max_h));
 }
 
 pub fn setPasses(partial_passes: i32, full_passes: i32) Error!void {
