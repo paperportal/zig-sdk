@@ -55,7 +55,7 @@ pub export fn ppInit(api_version: i32, screen_w: i32, screen_h: i32, args_ptr: i
     _ = args_ptr;
     _ = args_len;
 
-    sdk.core.begin() catch return -1;
+    sdk.core.begin(.lgfx) catch return -1;
 
     g_stack = ui.SceneStack.init(allocator, screen_w, screen_h, 8);
     g_stack.setInitial(ui.Scene.from(MainScene, &g_main)) catch return -1;

@@ -6,7 +6,7 @@ pub extern "m5" fn heapCheck(label: [*:0]const u8, print_errors: i32) i32;
 pub extern "m5" fn heapLog(label: [*:0]const u8) void;
 pub extern "m5" fn openApp(app_id: [*:0]const u8, arguments: [*:0]const u8) i32;
 pub extern "m5" fn exitApp() i32;
-pub extern "m5" fn begin() i32;
+pub extern "m5" fn begin(driver: i32) i32;
 pub extern "m5" fn delayMs(ms: i32) i32;
 pub extern "m5" fn millis() i32;
 pub extern "m5" fn micros() i64;

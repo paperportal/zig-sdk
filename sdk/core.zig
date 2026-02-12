@@ -45,9 +45,15 @@ pub const Feature = struct {
     pub const nvs: u64 = 1 << 17;
 };
 
+/// Display driver selection passed to `begin`.
+pub const DisplayDriver = enum(i32) {
+    lgfx = 0,
+    fastepd = 1,
+};
+
 /// Initialize the runtime and bind to the host environment.
-pub fn begin() Error!void {
-    try errors.check(ffi.begin());
+pub fn begin(driver: DisplayDriver) Error!void {
+    try errors.check(ffi.begin(@intFromEnum(driver)));
 }
 
 /// Returns the current host API version number.
