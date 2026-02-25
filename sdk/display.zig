@@ -1,6 +1,6 @@
 //! Display drawing, text, and image APIs.
 //!
-//! This module is a thin Zig wrapper around the firmware's `m5_display` WASM host functions.
+//! This module is a thin Zig wrapper around the firmware's `portal_display` WASM host functions.
 //! Most functions return `Error` on failure; a few "getter" style functions return the raw
 //! integer result which may be a negative WASM error code.
 

@@ -15,7 +15,7 @@ pub const SocketType = enum(i32) {
     dgram = 2,
 };
 
-/// Socket address format expected by the host `m5_socket` API.
+/// Socket address format expected by the host `portal_socket` API.
 ///
 /// Notes:
 /// - Host currently treats this as IPv4 even if `family` is inet6.
