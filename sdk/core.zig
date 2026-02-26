@@ -39,6 +39,8 @@ pub const Feature = struct {
     pub const httpd: u64 = 1 << 14;
     /// Socket APIs are available.
     pub const socket: u64 = 1 << 15;
+    /// TLS socket APIs are available.
+    pub const socket_tls: u64 = 1 << 20;
     /// Filesystem APIs are available.
     pub const fs: u64 = 1 << 16;
     /// NVS (non-volatile storage) APIs are available.

@@ -230,6 +230,29 @@ pub extern "portal_socket" fn sockSend(sockfd: i32, buf_ptr: [*]const u8, buf_le
 pub extern "portal_socket" fn sockRecv(sockfd: i32, buf_ptr: [*]u8, buf_len: i32, timeout_ms: i32) i32;
 pub extern "portal_socket" fn sockClose(sockfd: i32) i32;
 
+// TLS socket functions
+
+pub extern "portal_socket_tls" fn tlsServerConfigCreate(
+    server_cert_pem_ptr: [*]const u8,
+    server_cert_pem_len: usize,
+    server_key_pem_ptr: [*]const u8,
+    server_key_pem_len: usize,
+    client_ca_pem_ptr: ?[*]const u8,
+    client_ca_pem_len: usize,
+    flags: i32,
+) i32;
+pub extern "portal_socket_tls" fn tlsServerConfigFree(handle: i32) i32;
+pub extern "portal_socket_tls" fn tlsAccept(
+    config_handle: i32,
+    listen_sockfd: i32,
+    out_addr_ptr: [*]u8,
+    out_addr_len: i32,
+    timeout_ms: i32,
+) i32;
+pub extern "portal_socket_tls" fn tlsSend(tls_handle: i32, buf_ptr: [*]const u8, buf_len: i32, timeout_ms: i32) i32;
+pub extern "portal_socket_tls" fn tlsRecv(tls_handle: i32, buf_ptr: [*]u8, buf_len: i32, timeout_ms: i32) i32;
+pub extern "portal_socket_tls" fn tlsClose(handle: i32) i32;
+
 // HAL functions (misc)
 
 pub extern "portal_hal" fn extPortTestStart() i32;

@@ -13,6 +13,7 @@ pub const nvs = @import("sdk/nvs.zig");
 pub const power = @import("sdk/power.zig");
 pub const rtc = @import("sdk/rtc.zig");
 pub const socket = @import("sdk/socket.zig");
+pub const tls_socket = @import("sdk/tls_socket.zig");
 pub const speaker = @import("sdk/speaker.zig");
 pub const touch = @import("sdk/touch.zig");
 pub const ui = @import("sdk/ui.zig");
