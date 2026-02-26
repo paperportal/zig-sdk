@@ -1,6 +1,6 @@
 # `paper_portal_sdk.ui`
 
-Scene-stack UI helpers for Paper Portal WASM apps. This module is pure Zig (no host FFI) and is meant to sit on top of the host callback surface (`ppInit`, `portalGesture`).
+Scene-stack UI helpers for Paper Portal WASM apps. The scene stack is pure Zig (no host FFI) and is meant to sit on top of the host callback surface (`ppInit`, `portalGesture`). The `ui.Painter` helper is a convenience layer for host-backed drawing (the same underlying surface as `sdk.display`) while providing a layout-friendly, local-coordinate API.
 
 The SDK entrypoint re-exports this module as `sdk.ui`:
 
@@ -164,3 +164,24 @@ Stack methods return `anyerror!void`:
 - plus anything your scene callbacks return (and any `sdk.*` errors you propagate)
 
 If your `onGesture` handler ignores errors, prefer logging them (or at least leaving them visible during development) so you can catch bugs early.
+
+## Painter
+
+`ui.Painter` is a small value type that represents a rectangular layout region (`x`, `y`, `w`, `h`). You draw using local coordinates relative to the painter’s origin: `(0, 0)` means the painter’s top-left corner.
+
+Painter bounds are for layout convenience only: there is no clipping/scissoring. Draw calls are allowed to overflow outside the painter’s region; painter methods only translate coordinates and perform the corresponding host-backed draw calls (equivalent to calling `sdk.display.*`).
+
+### Example
+
+```zig
+const sdk = @import("paper_portal_sdk");
+const ui = sdk.ui;
+
+pub fn drawHello() !void {
+    var screen = try ui.Painter.screen();
+    var content = screen.paddedPainter(ui.Padding.all(10));
+
+    try content.fillRect(0, 0, content.width(), content.height(), sdk.display.colors.WHITE);
+    try content.drawText("Hello", 0, 0);
+}
+```
